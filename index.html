@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>yourpsp.date</title>
+	<style type="text/css">
+		@font-face {
+			font-family: 'Saira';
+			font-style: normal;
+			font-weight: 400;
+			src: url('fonts/saira-regular.eot'); /* IE9 Compat Modes */
+			src: local(''),
+			     url('fonts/saira-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+			     url('fonts/saira-regular.woff2') format('woff2'), /* Super Modern Browsers */
+			     url('fonts/saira-regular.woff') format('woff'), /* Modern Browsers */
+			     url('fonts/saira-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+			     url('fonts/saira-regular.svg#Saira') format('svg'); /* Legacy iOS */
+		}
+		@font-face {
+			font-family: 'Saira';
+			font-style: normal;
+			font-weight: 700;
+			src: url('fonts/saira-700.eot'); /* IE9 Compat Modes */
+			src: local(''),
+			     url('fonts/saira-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+			     url('fonts/saira-700.woff2') format('woff2'), /* Super Modern Browsers */
+			     url('fonts/saira-700.woff') format('woff'), /* Modern Browsers */
+			     url('fonts/saira-700.ttf') format('truetype'), /* Safari, Android, iOS */
+			     url('fonts/saira-700.svg#Saira') format('svg'); /* Legacy iOS */
+		}
+
+		body {
+			font-family: Saira, Eurostile, sans-serif;
+			font-size: 14.666px;
+			background: rgb(132,176,0);
+			background: linear-gradient(144deg, rgba(132,176,0,1) 0%, rgba(125,255,0,1) 100%);
+			margin: 0 1em;
+			color: white;
+			filter: drop-shadow(0.1em 0.1em 0.25em rgba(0,0,0,0.75));
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			min-height: 100%;
+			min-height: 100vh;
+			user-select: none;
+			-webkit-user-select: none;
+			cursor: default;
+		}
+
+		@media (min-width: 320px) { body { font-size: calc(14.666px + (36.666 - 14.666) / (1280 - 320) * (100vw - 320px)); } }
+
+		@media (min-width: 1280px) { body { font-size: 36.666px; } }
+
+		h1 {
+			font-size: inherit;
+			margin: 0;
+			flex: 1 0 6em;
+		}
+
+		p {
+			margin: 0;
+			flex: 1 0 auto;
+		}
+
+		.xmb, .menu {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+		}
+
+		.xmb > img {
+			width: 3em;
+			margin-right: 1em;
+		}
+
+		.menu {
+			margin-left: 1em;
+		}
+
+		.menu > img {
+			width: 1.25em;
+		}
+
+		.menuitem {
+			margin-left: 1em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex: 1 1 auto;
+			flex-wrap: wrap;
+			padding-bottom: 0.2em;
+			border-bottom: 0.075em solid currentcolor;
+		}
+
+		#date {
+			text-align: right;
+		}
+	</style>
+	<script type="text/javascript" src="js/luxon.min.js"></script>
+</head>
+<body>
+	<div class="xmb">
+		<img src="img/datetime.svg" alt="" />
+		◀
+		<div class="menu">
+			<img src="img/wrench.svg" alt="" />
+			<div class="menuitem">
+				<h1>yourpsp.date</h1>
+				<p id="date"></p>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var date = document.getElementById('date');
+		var locale = undefined;
+		var date_format = luxon.DateTime.DATE_HUGE;
+		var epoch = luxon.DateTime.local(2008, 3).setLocale(locale);
+		var epochParts = epoch.toLocaleParts(date_format);
+
+		var now = luxon.DateTime.now().setLocale(locale);
+
+		var dayNumber = Math.floor(now.diff(epoch, 'days').days);
+
+		var nowParts = now.toLocaleParts(date_format);
+
+		var m33DateString = nowParts.map(({ type, value }, index) => {
+			switch (type) {
+			case 'year':
+			case 'month':
+				return epochParts[index].value;
+			case 'day':
+				return dayNumber.toLocaleString(locale);
+			default:
+				return value;
+			}
+		}).join('');
+
+		date.innerText = m33DateString;
+	</script>
+</body>
+</html>
